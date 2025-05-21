@@ -1,257 +1,213 @@
 <?php
 include 'db.php';
-
-<<<<<<< HEAD
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $conn->real_escape_string($_POST['name']);
-    $quantity = (int)$_POST['quantity'];
-    $price = (float)$_POST['price'];
-
-    if ($name && $quantity >= 0 && $price >= 0) {
-        $sql = "INSERT INTO products (name, quantity, price) VALUES ('$name', $quantity, $price)";
-        if ($conn->query($sql) === TRUE) {
-            header("Location: " . $_SERVER['PHP_SELF']); // redirect to avoid resubmission
-            exit();
-        } else {
-            $error = "Error: " . $conn->error;
-        }
-    } else {
-        $error = "Please fill all fields correctly.";
-    }
-}
-
-// Fetch products
-$sql = "SELECT * FROM products ORDER BY created_at DESC";
-=======
-// Fetch inventory items
-$sql = "SELECT * FROM items";
->>>>>>> 0f2343101dd09dcf6b45d4c3a100256c24b31759
-$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Inventory Management</title>
-    <style>
-        /* (Add the same CSS I gave you before for the table here) */
-        /* plus styling for the form below */
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f7fa;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #007bff;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto 40px auto;
-            background: white;
-            box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        th, td {
-            padding: 15px 20px;
-            text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        tr:nth-child(even) {
-            background-color: #f9faff;
-        }
-        tr:hover {
-            background-color: #e6f0ff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        form {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-        }
-        form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #007bff;
-        }
-        form input[type="text"],
-        form input[type="number"],
-        form input[type="submit"] {
-            width: 100%;
-            padding: 10px 15px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        form input[type="submit"] {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 700;
-            transition: background-color 0.3s ease;
-        }
-        form input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        .error {
-            max-width: 900px;
-            margin: 0 auto 20px auto;
-            color: #b00020;
-            font-weight: 600;
-        }
-
-        @media (max-width: 600px) {
-            /* same responsive table styles from earlier */
-            body {
-                padding: 10px;
-            }
-            table, thead, tbody, th, td, tr {
-                display: block;
-            }
-            thead tr {
-                display: none;
-            }
-            tr {
-                margin-bottom: 20px;
-                box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-                border-radius: 8px;
-                background: white;
-                padding: 15px;
-            }
-            td {
-                padding: 10px 10px;
-                text-align: right;
-                position: relative;
-                padding-left: 50%;
-                border-bottom: 1px solid #eee;
-            }
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 15px;
-                width: 45%;
-                padding-left: 10px;
-                font-weight: 600;
-                text-align: left;
-                color: #007bff;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-            form input[type="text"],
-            form input[type="number"],
-            form input[type="submit"] {
-                width: 100%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inventory Management System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0; padding: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 30px;
+    }
+    form {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    input, textarea, button {
+      font-size: 1rem;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+    button {
+      background-color: #007bff;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+      padding: 14px 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fafafa;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    tr:hover {
+      background-color: #e9f0ff;
+    }
+    .actions form {
+      display: inline-block;
+      margin: 0 4px;
+    }
+    .actions button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .edit-btn {
+      background-color: #28a745;
+      color: white;
+    }
+    .edit-btn:hover {
+      background-color: #1e7e34;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    .delete-btn:hover {
+      background-color: #a71d2a;
+    }
+    .clear-btn {
+      background-color: #6c757d;
+      color: white;
+      margin-bottom: 25px;
+      width: 150px;
+      display: block;
+      text-align: center;
+    }
+    .clear-btn:hover {
+      background-color: #565e64;
+    }
+  </style>
 </head>
 <body>
-    <h1>Product Inventory</h1>
 
-    <?php if (!empty($error)): ?>
-        <div class="error"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
+<div class="container">
+  <h2>Inventory Management System</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th><th>Name</th><th>Quantity</th><th>Price</th><th>Created At</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while($row = $result->fetch_assoc()): ?>
-            <tr>
-                <td data-label="ID"><?= htmlspecialchars($row['id']) ?></td>
-                <td data-label="Name"><?= htmlspecialchars($row['name']) ?></td>
-                <td data-label="Quantity"><?= htmlspecialchars($row['quantity']) ?></td>
-                <td data-label="Price"><?= htmlspecialchars($row['price']) ?></td>
-                <td data-label="Created At"><?= htmlspecialchars($row['created_at']) ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
+  <form method="POST" action="db.php" id="add-form">
+    <input type="hidden" name="id" id="item-id" />
+    <input type="text" name="name" id="name" placeholder="Item Name" required />
+    <textarea name="description" id="description" placeholder="Description" rows="2"></textarea>
+    <input type="number" name="quantity" id="quantity" placeholder="Quantity" min="0" required />
+    <input type="number" name="price" id="price" placeholder="Price" min="0" step="0.01" required />
+    <button type="submit" name="add" id="add-btn">Add Item</button>
+    <button type="submit" name="update" id="update-btn" style="display:none; background-color:#28a745;">Update Item</button>
+    <button type="button" id="cancel-btn" style="display:none; margin-top:10px;">Cancel</button>
+  </form>
 
-    <form method="POST" action="">
-        <label for="name">Product Name:</label>
-        <input type="text" name="name" id="name" required />
+  <form method="POST" action="db.php">
+    <button type="submit" name="clear" class="clear-btn">Clear All Items</button>
+  </form>
 
-        <label for="quantity">Quantity:</label>
-        <input type="number" name="quantity" id="quantity" min="0" required />
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Price (₹)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      $result = $conn->query("SELECT * FROM items ORDER BY id DESC");
+      while ($row = $result->fetch_assoc()):
+      ?>
+      <tr>
+        <td><?= htmlspecialchars($row['id']) ?></td>
+        <td><?= htmlspecialchars($row['name']) ?></td>
+        <td><?= htmlspecialchars($row['description']) ?></td>
+        <td><?= htmlspecialchars($row['quantity']) ?></td>
+        <td><?= htmlspecialchars(number_format($row['price'], 2)) ?></td>
+        <td class="actions">
+          <button class="edit-btn" 
+            data-id="<?= $row['id'] ?>"
+            data-name="<?= htmlspecialchars($row['name'], ENT_QUOTES) ?>"
+            data-description="<?= htmlspecialchars($row['description'], ENT_QUOTES) ?>"
+            data-quantity="<?= $row['quantity'] ?>"
+            data-price="<?= $row['price'] ?>"
+          >Edit</button>
+          <form method="POST" action="db.php" style="display:inline;">
+            <input type="hidden" name="id" value="<?= $row['id'] ?>" />
+            <button type="submit" name="delete" class="delete-btn" onclick="return confirm('Delete this item?');">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <?php endwhile; ?>
+    </tbody>
+  </table>
+</div>
 
-        <label for="price">Price:</label>
-        <input type="number" name="price" id="price" min="0" step="0.01" required />
+<script>
+  // Handle Edit button click
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      // Populate form fields with item data
+      document.getElementById('item-id').value = button.getAttribute('data-id');
+      document.getElementById('name').value = button.getAttribute('data-name');
+      document.getElementById('description').value = button.getAttribute('data-description');
+      document.getElementById('quantity').value = button.getAttribute('data-quantity');
+      document.getElementById('price').value = button.getAttribute('data-price');
 
-        <input type="submit" value="Add Product" />
-    </form>
-=======
-<html>
-<head>
-    <title>Inventory Management</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Inventory Items</h1>
+      // Toggle buttons visibility
+      document.getElementById('add-btn').style.display = 'none';
+      document.getElementById('update-btn').style.display = 'inline-block';
+      document.getElementById('cancel-btn').style.display = 'inline-block';
+    });
+  });
 
-    <h2>Add New Item</h2>
-    <form action="add_item.php" method="POST">
-        <label>Name:</label><br>
-        <input type="text" name="name" required><br><br>
+  // Cancel update and clear form
+  document.getElementById('cancel-btn').addEventListener('click', () => {
+    document.getElementById('add-form').reset();
+    document.getElementById('item-id').value = '';
+    document.getElementById('add-btn').style.display = 'inline-block';
+    document.getElementById('update-btn').style.display = 'none';
+    document.getElementById('cancel-btn').style.display = 'none';
+  });
+</script>
 
-        <label>Quantity:</label><br>
-        <input type="number" name="quantity" required><br><br>
-
-        <label>Price:</label><br>
-        <input type="number" step="0.01" name="price" required><br><br>
-
-        <input type="submit" value="Add Item">
-    </form>
-
-    <hr>
-
-    <table border="1" cellpadding="10" cellspacing="0">
-        <tr>
-            <th>ID</th><th>Name</th><th>Quantity</th><th>Price</th>
-        </tr>
-        <?php
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>{$row['id']}</td>
-                        <td>".htmlspecialchars($row['name'])."</td>
-                        <td>{$row['quantity']}</td>
-                        <td>{$row['price']}</td>
-                      </tr>";
-            }
-        } else {
-            echo "<tr><td colspan='4'>No items found</td></tr>";
-        }
-        ?>
-    </table>
->>>>>>> 0f2343101dd09dcf6b45d4c3a100256c24b31759
 </body>
 </html>
